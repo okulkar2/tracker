@@ -1,6 +1,19 @@
-<p>
-  vehicle works!
-</p>
-<app-vehicle-list></app-vehicle-list>
-<hr>
-<app-vehicle-detail></app-vehicle-detail>
+<div class="row">
+    <div class="col-md-5">
+        <div class="row">
+            <div class="col-xs-12">
+                <app-vehicle-list-item *ngFor = "let vehicle of vehicles"
+                 [element] = "vehicle"></app-vehicle-list-item>
+            </div>
+        </div>
+    </div>    
+    <div class="col-md-7">
+        <app-vehicle-detail
+        *ngIf = "selectedVehicle; else InfoText" 
+        [vehicleElement] = "selectedVehicle"></app-vehicle-detail>
+        <ng-template #InfoText>
+            <h3>Please select a Vehicle</h3>
+        </ng-template>
+    </div>
+</div>
+

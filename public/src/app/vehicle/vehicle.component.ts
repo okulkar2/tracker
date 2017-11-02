@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core'
+import { Vehicle } from '../shared/vehicle.model'
+import { VehicleService } from '../shared/vehicle.service'
+
 
 @Component({
   selector: 'app-vehicle',
@@ -7,9 +10,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class VehicleComponent implements OnInit {
 
-  constructor() { }
+  vehicles: Vehicle[];
+  selectedVehicle: Vehicle;
 
-  ngOnInit() {
+  constructor(private vehicleService: VehicleService) {
+    this.vehicleService.vehicleSelected.subscribe(
+      (vehicle: Vehicle) => {
+          this.selectedVehicle = vehicle;
+      }
+  )
   }
 
+  ngOnInit() {
+    this.vehicles = this.vehicleService.getVehicles();
+  }
+
+  onVehicleSelected(data: Vehicle) {
+    this.selectedVehicle = data;
+  }
 }
