@@ -18,11 +18,15 @@ export class VehicleComponent implements OnInit {
       (vehicle: Vehicle) => {
           this.selectedVehicle = vehicle;
       }
-  )
+    )
+
+    this.vehicleService.getVehicles().subscribe(
+      vehicles => this.vehicles = vehicles,
+      error => console.log(error)
+    );
   }
 
   ngOnInit() {
-    this.vehicles = this.vehicleService.getVehicles();
   }
 
   onVehicleSelected(data: Vehicle) {

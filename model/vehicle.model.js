@@ -8,7 +8,7 @@ var vehicleSchema = new Schema({
 	year: Number,
 	redlineRpm: Number,
 	maxFuelVolume: Number,
-	lastServiceDate: String
+	lastServiceDate: Date
 })
 
 module.exports = mongoose.model('Vehicle', vehicleSchema);

@@ -1,25 +1,23 @@
 import { Vehicle } from './vehicle.model';
-import { EventEmitter } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
 
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/throw';
 
+@Injectable()
 export class VehicleService {
 
-    private vehicles: Vehicle[]  = [
-        {
-            vin: '1HGCR2F3XFA027534',
-            make: 'HONDA',
-            model: 'ACCORD',
-            year: 2015,
-            redlineRpm: 5500,
-            maxFuelVolume: 15,
-            lastServiceDate: '2017-05-25T17:31:25.268Z'
-        },
-    ];
+    public vehicleSelected = new EventEmitter<Vehicle>();
 
-    vehicleSelected = new EventEmitter<Vehicle>();
+    constructor(private http: Http) {}
 
-    getVehicles() {
-        return this.vehicles;
+    getVehicles(): Observable<Vehicle[]> {
+        return this.http.get('/api/vehicles')
+                        .map(response => response.json())
+                        .catch(error => Observable.throw(error.statusText));
     }
 
 }

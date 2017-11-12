@@ -1,5 +1,5 @@
 
-let vehicle = require('../model/vehicle.model');
+let Vehicle = require('../model/vehicle.model');
 let reading = require('../model/reading.model');
 let bodyParser = require('body-parser');
 
@@ -21,16 +21,16 @@ module.exports = function(app){
 			next();
 	});
 
-	app.get('/api/todos', function(req, res){
+	app.get('/api/vehicles', function(req, res){
 		
 		console.log("Retrieving a Todo with username");
 		
-		Todo.find({}).exec(function(err, todoList){
+		Vehicle.find({}).exec(function(err, vehicleList){
 		
 			if (err){
-				res.send(`There is no ${req.params.uname} present in the  database`);
+				res.send("There is no vehicles present in the  database");
 			}else{
-				res.send(JSON.stringify(todoList));
+				res.send(JSON.stringify(vehicleList));
 			}
 		});
 		
@@ -40,11 +40,29 @@ module.exports = function(app){
 
 		console.log("Saving the data to Database");
 
+		console.log(req.body);
+		let newVehicle = [];
 		for(let i=0; i<req.body.length; i++){
-			console.log(i+":"+req.body[i].lastServiceDate);
+
+			newVehicle[i] = new Vehicle();
+
+			newVehicle[i].vin = req.body[i].vin;
+			newVehicle[i].make = req.body[i].make;
+			newVehicle[i].model = req.body[i].model;
+			newVehicle[i].year = req.body[i].year;
+			newVehicle[i].redlineRpm = req.body[i].redlineRpm;
+			newVehicle[i].maxFuelVolume = req.body[i].maxFuelVolume;
+			newVehicle[i].lastServiceDate = new Date(req.body[i].lastServiceDate);
+			
 		}
 
-		res.status(200).send("Received Vehicles data");
+		Vehicle.create(newVehicle, function(err){
+			if(err){
+				res.send("Could not add data to the Database");
+			}else{
+				res.status(200).send("<html><head></head><body><h2>The Data has been successfully added to the Database</h2></body></html>");
+			}
+		})
 
 		/*if(req.body.id){
 			Todo.findByIdAndUpdate(req.body.id, { $set: {
@@ -77,32 +95,6 @@ module.exports = function(app){
 			})
 		}*/
 		
-	});
-
-	app.delete('/api/todo', function(req, res){
-
-		console.log("Deleting a specific User from the DataBase");
-
-		Todo.findByIdAndRemove(req.body.id, function(err, todo){
-
-			if(err){
-				
-
-				res.send('Unable to delete');
-
-			}else{
-				
-				let response = {
-					message: "Todo successfully removed",
-					id: todo._id
-				}
-
-				res.status(200).send(response);
-			}
-
-
-		})
-
 	});
 
 }

@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { VehicleComponent } from './vehicle/vehicle.component';
@@ -17,7 +18,8 @@ import { VehicleService } from './shared/vehicle.service';
     HeaderComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    HttpModule
   ],
   providers: [VehicleService],
   bootstrap: [AppComponent]
