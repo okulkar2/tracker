@@ -2,18 +2,19 @@ let express = require('express');
 let mongoose = require('mongoose');
 let config = require('./config');
 let path = require('path');
-//let apiController = require('./controller/apiController');
+let apiController = require('./controller/apiController');
 //let setupController = require('./controller/setupController');
 let dbFunctions = require('./dbStore/dbFunctions');
 
 var app = express();
 mongoose.Promise = global.Promise;
+apiController(app);
 
 app.use(express.static(path.join(__dirname+'/public/dist')));
 
-app.get('/', (req, res) => {
+/*app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/dist/index.html'));
-});
+});*/
 
 dbFunctions.ConnectToMongoDB(startApp);
 

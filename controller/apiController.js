@@ -1,13 +1,25 @@
 
-
 let vehicle = require('../model/vehicle.model');
 let reading = require('../model/reading.model');
 let bodyParser = require('body-parser');
 
 module.exports = function(app){
 
+	console.log("Api Controller is running");
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({ extended: true}));
+
+	app.use('/api/vehicles', function(req, res, next){
+
+		res.setHeader("Access-Control-Allow-Origin", "http://mocker.egen.io");
+		res.setHeader("Access-Control-Allow-Methods","PUT, POST");
+		res.setHeader("Access-Control-Allow-Headers", "content-type");
+		
+		if(req.method === "OPTIONS")
+			res.sendStatus(200);
+		else
+			next();
+	});
 
 	app.get('/api/todos', function(req, res){
 		
@@ -24,41 +36,17 @@ module.exports = function(app){
 		
 	});
 
-	app.get('/api/todos/:uname', function(req, res){
-
-		console.log("Retrieving a Todo with username");
-
-		Todo.find({ username: req.params.uname }).exec(function(err, todoList){
-
-			if (err){
-				res.send(`There is no ${req.params.uname} present in the  database`);
-			}else{
-				res.send(JSON.stringify(todoList));
-			}
-		});
-
-	});
-
-	app.get('/api/todo/:id', function(req, res){
-
-		console.log("Retrieving a single Todo");
-
-		Todo.findById(req.params.id).exec(function(err, todoList){
-
-			if (err){
-				res.send(`There is no ${req.params.id} present in the  database`);
-			}else{
-				res.json(todoList);
-			}
-		});
-
-	});
-
-	app.post('/api/todo', function(req, res){
+	app.put('/api/vehicles', function(req, res){
 
 		console.log("Saving the data to Database");
 
-		if(req.body.id){
+		for(let i=0; i<req.body.length; i++){
+			console.log(i+":"+req.body[i].lastServiceDate);
+		}
+
+		res.status(200).send("Received Vehicles data");
+
+		/*if(req.body.id){
 			Todo.findByIdAndUpdate(req.body.id, { $set: {
 				todo: req.body.todo,
 				isDone: req.body.isDone,
@@ -71,9 +59,9 @@ module.exports = function(app){
 				}
 			})
 
-		}else{
+		}else{*/
 
-			var newTodo = new Todo();
+			/*var newTodo = new Todo();
 
 			newTodo.username = "test";
 			newTodo.todo = req.body.todo;
@@ -87,7 +75,7 @@ module.exports = function(app){
 					res.send("<html><head></head><body><h2>The Data has been successfully added to the Database</h2></body></html>");
 				}
 			})
-		}
+		}*/
 		
 	});
 
